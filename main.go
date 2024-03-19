@@ -13,6 +13,9 @@ func main() {
 	server := http.NewServeMux()
 	server.HandleFunc("/hello", handleHello)
 
+	fs := http.FileServer(http.Dir("./public"))
+	server.Handle("/", fs)
+
 	err := http.ListenAndServe(":3333", server)
 	if err == nil {
 		fmt.Println("Error while opening the server")
