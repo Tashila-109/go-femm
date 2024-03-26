@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"gomuseum/go/museum/api"
+	"gomuseum/go/museum/data"
 	"html/template"
 	"net/http"
 )
@@ -17,13 +19,14 @@ func handleTemplate(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Internal Server Error"))
 		return
 	}
-	html.Execute(w, "Test")
+	html.Execute(w, data.GetAll())
 }
 
 func main() {
 	server := http.NewServeMux()
 	server.HandleFunc("/hello", handleHello)
 	server.HandleFunc("/template", handleTemplate)
+	server.HandleFunc("/api/exhibitions", api.Get)
 
 	fs := http.FileServer(http.Dir("./public"))
 	server.Handle("/", fs)
